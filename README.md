@@ -1,59 +1,44 @@
-# MfePractice
+# Angular Module Federation Setup
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
+This repository contains the initialization steps for an Angular Micro-Frontend workspace using Module Federation.
 
-## Development server
+## 🛠️ Step-by-Step Workspace Setup
 
-To start a local development server, run:
-
+### 1. Generate Applications
+Create the main shell application and the product remote application inside your workspace:
 ```bash
-ng serve
+ng generate application shell --routing --style=scss --skip-tests
+ng generate application product --routing --style=css --skip-tests
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+### 2. Install Module Federation
+Install the module federation package tailored for Angular architecture:
 ```bash
-ng generate component component-name
+npm i @angular-architects/module-federation@19
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
+### 3. Initialize Webpack Configuration
+Configure the host (shell) and remote (product) applications to use Module Federation on specific ports:
 ```bash
-ng generate --help
+# Configure Shell as Host on Port 4200
+ng g @angular-architects/module-federation:init-webpack --project shell --type host --port 4200 --skip-confirmation
+
+# Configure Product as Remote on Port 4201
+ng g @angular-architects/module-federation:init-webpack --project product --type remote --port 4201 --skip-confirmation
+
+# Configure Product as Remote on Port 4202
+ng g @angular-architects/module-federation:init-webpack --project product --type remote --port 4202 --skip-confirmation
 ```
 
-## Building
-
-To build the project run:
-
+### 4. Create Shared UI Library
+Generate a shared library to reuse components across your applications:
 ```bash
-ng build
+ng g library shared-ui
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 🚀 Running the Applications
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
+To run the shell, product, and account micro-frontends simultaneously, execute:
 ```bash
-ng test
+npm run run:all -- shell product account
 ```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
